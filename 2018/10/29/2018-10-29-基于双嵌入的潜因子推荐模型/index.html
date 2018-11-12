@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.ico?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.ico?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.ico?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/icon.ico?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="一个用于推荐的基于对偶嵌入的深度潜因子模型">
+<meta name="keywords" content="algorithm,Recommended system,Dual-Embedding,Deep Latent Factor">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Dual-Embedding based Deep Latent Factor Model for Recommendation">
+<meta property="og:url" content="http://smilexnan.github.io/2018/10/29/2018-10-29-基于双嵌入的潜因子推荐模型/index.html">
+<meta property="og:site_name" content="SmileCode">
+<meta property="og:description" content="一个用于推荐的基于对偶嵌入的深度潜因子模型">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpfitdspgj3066014t8i.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpfiustnuj309z02m0sq.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpg2rhhmtj307t01vdfq.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpg33rxylj30a6021mx4.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fwphg67zrkj303n010mwy.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fwphhmqwwej30s60i1jur.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpiiaqqv8j306m04g0su.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpiyv58agj30aq02wt8r.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpj81rxwbj306c01rwec.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpjd7euamj30du02qmx5.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpjh35m5wj305n019web.jpg">
+<meta property="og:updated_time" content="2018-11-12T04:59:20.793Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="A Dual-Embedding based Deep Latent Factor Model for Recommendation">
+<meta name="twitter:description" content="一个用于推荐的基于对偶嵌入的深度潜因子模型">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpfitdspgj3066014t8i.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://smilexnan.github.io/2018/10/29/2018-10-29-基于双嵌入的潜因子推荐模型/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>A Dual-Embedding based Deep Latent Factor Model for Recommendation | SmileCode</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SmileCode</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">采菊东篱下 悠然见南山</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-schedule">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/schedule/" rel="section"><i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>日程表</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://smilexnan.github.io/2018/10/29/2018-10-29-基于双嵌入的潜因子推荐模型/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Smilexnan">
+      <meta itemprop="description" content="这个人很懒~什么都没有留下~~">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SmileCode">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">A Dual-Embedding based Deep Latent Factor Model for Recommendation
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-29 00:00:00" itemprop="dateCreated datePublished" datetime="2018-10-29T00:00:00+08:00">2018-10-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-12 12:59:20" itemprop="dateModified" datetime="2018-11-12T12:59:20+08:00">2018-11-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">一个用于推荐的基于对偶嵌入的深度潜因子模型</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>推荐系统</p>
+<p>原文网盘分享：链接：<a href="https://pan.baidu.com/s/1YyRKEY-5FlpcM1dkWQ1NTQ" target="_blank" rel="noopener">https://pan.baidu.com/s/1YyRKEY-5FlpcM1dkWQ1NTQ</a><br>提取码：k6xj </p>
+</blockquote>
+<h2 id="DELF-A-Dual-Embedding-based-Deep-Latent-Factor-Model-for-Recommendation-总结"><a href="#DELF-A-Dual-Embedding-based-Deep-Latent-Factor-Model-for-Recommendation-总结" class="headerlink" title="DELF: A Dual-Embedding based Deep Latent Factor Model for Recommendation 总结"></a>DELF: A Dual-Embedding based Deep Latent Factor Model for Recommendation 总结</h2><h3 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h3><ul>
+<li>在各种推荐方法中，潜因子模型通常被认为是最先进的技术，其旨在学习user和item的嵌入以预测uesr-item偏好。</li>
+</ul>
+<ul>
+<li>存在的问题<ul>
+<li>当将潜因子模型应用于隐式反馈的推荐时，嵌入的质量总是受到不充分的正反馈和噪声负反馈的影响。</li>
+</ul>
+</li>
+<li>受NSVD中基于交互的item来表示user的思想的启发，本文提出一种基于对偶嵌入的深度潜在因子模型DELF，用于隐式反馈的推荐。<ul>
+<li>除了为user学习单个嵌入之外，我们还从交互item的角度为每个user提供一个附加的嵌入。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><ul>
+<li>在各种协同过滤方法中，潜因子模型被广泛使用，并被认为是最先进的推荐解决方案。<ul>
+<li>潜因子模型通常在相同的潜在空间中用特征向量描述user和item，并基于相应的向量估计每个user-item偏好。</li>
+<li>例如：矩阵分解（MF）直接计算user和item向量的内积作为偏好得分。</li>
+<li>神经协同过滤（NCF）利用非线性函数来模拟user和item潜因子之间的相互作用。</li>
+</ul>
+</li>
+<li>早期的潜因子模型主要关注的是显式反馈，例如用户在所有item上的评分表达了用户的偏好，在这些研究工作中，推荐被公式化为评分预测问题，并且通过最小化预测和观察到的评分之间的误差来迭代更新user和item的嵌入。</li>
+<li>问题：<ul>
+<li>在很多实际应用中难以获得显式评分，这促使推荐系统利用来自user的行为历史的更丰富的隐式反馈进行推荐。</li>
+<li>一个重要的问题是：<ul>
+<li>一直以来，仅利用正反馈学习user和item的嵌入将导致严重的过拟合</li>
+<li>当给出稀疏的负反馈时，如何为user和item学习适当的嵌入</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>解决：<ul>
+<li>将所有未观察到的user-item交互都作为负反馈<ul>
+<li>问题：由于并非所有未观察到的item都是真正的负反馈，因此解决方案可能会降低user和item嵌入的质量</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>本文思路：<ul>
+<li>根据NSVD是根据user评价的item对user进行参数化。在NSVD中，user的嵌入由与user交互的所有item的嵌入确定。其不受负反馈的影响而且对user交互的数量更加鲁棒。</li>
+<li>这激励我们根据用于user交互的item的特征向量来表示user，以便通过隐式反馈进行推荐。</li>
+<li>此外，NSVD只是平均与其交互的item的嵌入来表示user，但不同的item可能对同一个user建模有不同的贡献，因此，我们结合了注意力机制来自动区分不同交互item的重要性。</li>
+<li>并且可以通过聚合具有非均匀权重的item嵌入来计算基于item的user嵌入。同样，我们可以获得基于user的item嵌入，从user的角度来描述item。</li>
+</ul>
+</li>
+<li>总结：<ul>
+<li>本文提出了一种基于对偶嵌入的深度潜因子模型，命名为DELF，用于隐式反馈的推荐。</li>
+<li>我们引入了一种基于注意力机制的神经方法来为每个user（相应的item）构建基于item的（基于user的）嵌入，它自动区分不同user和item的重要性。</li>
+<li>然后，我们将这些嵌入与一个基本的嵌入相结合，使用深度神经网络架构建模非线性的user-item交互关系。 DELF的一个新尝试就是我们使用对偶嵌入来为每个user-item对学习四种深度交互，这使得DELF能够推广两种有原则的CF方法，即NCF和NSVD。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Preliminaries"><a href="#Preliminaries" class="headerlink" title="Preliminaries"></a>Preliminaries</h3><ul>
+<li>Rui = 1表示user u 和 item i之间有交互， Rui = 0表示没有观察到交互。</li>
+<li>Neural Collaborative Filtering<ul>
+<li>诸如矩阵因子分解（MF）的潜在因子模型通常用潜在特征的实值向量表示每个user/item。</li>
+<li>我们分别用pu和pi表示user u和item i在K维潜在空间中的向量。 u和i之间的偏好得分Rui由pu和qi的内积计算。</li>
+<li><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpfitdspgj3066014t8i.jpg" alt=""></li>
+<li>内积运算线性地聚合成对潜在特征的乘法，这不足以捕获复杂的user-item交互。</li>
+<li>因此使用更高级的神经协同过滤</li>
+<li><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpfiustnuj309z02m0sq.jpg" alt=""></li>
+<li>其中X是神经网络中隐藏层的数量，⊕是向量的串联，Wl，bl和δl分别是第l层的权重矩阵，偏置向量和非线性激活函数。</li>
+</ul>
+</li>
+<li>NSVD<ul>
+<li>NSVD根据user评分的item对user进行建模。</li>
+<li>形式上，每个item与两个潜在向量qi和yi相关联。 </li>
+<li>估计user u对item i的偏好分数。其中R（u）是user u评定的item集合，bu和bi是偏差项。 </li>
+<li>NSVD通过使用item因子的线性组合来表示user来减少user因子的冗余。 </li>
+<li>然而，NSVD的主要问题是，对具有完全不同评级的相同item集合评级的两个user具有相同的表示。</li>
+<li><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpg2rhhmtj307t01vdfq.jpg" alt=""></li>
+</ul>
+</li>
+<li>SVD++<ul>
+<li>为了解决NSVD的问题，SVD++建议用于具有显式评级的推荐。其中pu是user的潜因子。 SVD ++利用基于NSVD的表示来调整user的潜因子，而不是代表user。 </li>
+<li><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpg33rxylj30a6021mx4.jpg" alt=""></li>
+</ul>
+</li>
+</ul>
+<h3 id="DELF"><a href="#DELF" class="headerlink" title="DELF"></a>DELF</h3><h4 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h4><p>DELF大体上是基于潜因子模型的传统框架，其假设偏好得分Rui可以由底层user和item潜因子生产，其中Θ表示u和i的潜在因子，f表示交互函数</p>
+<p><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fwphg67zrkj303n010mwy.jpg" alt=""></p>
+<p><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fwphhmqwwej30s60i1jur.jpg" alt=""></p>
+<h5 id="Input-Layer"><a href="#Input-Layer" class="headerlink" title="Input Layer"></a>Input Layer</h5><ul>
+<li>DELF的输入层由user u和item i的特征向量组成。</li>
+<li>基于单嵌入的潜因子模型，简单地将u和i与它们的one-hot表示user和item相关联。 </li>
+<li>除了one-hot向量之外，DELF还从观察到的u和i的交互关系中分别得到二进制交互向量的集合Ru*和R*i。<br>为此，我们从输入层获得user和item两种特征向量。</li>
+</ul>
+<h5 id="Embedding-Layer"><a href="#Embedding-Layer" class="headerlink" title="Embedding Layer"></a>Embedding Layer</h5><ul>
+<li>嵌入层将来自输入层的每个特征向量投影到密集向量表示中（从稀疏向量=&gt;密集向量）</li>
+<li>u 和i 的one-hot向量通过嵌入矩阵来获得原始特征向量的嵌入。</li>
+<li>对于交互向量Ru<em>和R\</em>i，我们采用一种注意力机制来学习相应的嵌入表示。 （原因前面已经提到）<ul>
+<li><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpiiaqqv8j306m04g0su.jpg" alt=""> </li>
+<li>其中mu是基于item的user嵌入，αi是user u评定的item i的注意分数，yi是潜因子</li>
+<li>其中Wa，ba分别表示权重矩阵和偏差向量，ha是上下文向量。 </li>
+<li>也就是说，我们首先将item的潜因子yi提供给单层MLP，其产生转换成hi作为yi的潜在表示。 </li>
+<li>然后，我们基于hi和上下文向量ha之间的相似性来度量item i的重要性，并通过softmax函数导出归一化的重要性权重αi。 </li>
+</ul>
+</li>
+</ul>
+<h5 id="Pairwise-Neural-Interaction-Layers"><a href="#Pairwise-Neural-Interaction-Layers" class="headerlink" title="Pairwise Neural Interaction Layers"></a>Pairwise Neural Interaction Layers</h5><ul>
+<li>将对偶嵌入成对的输入到神经交互层中以模拟u和i之间的特征交互。 </li>
+<li>不是使用单一的网络结构，而是分别为两种user/item嵌入模拟交互，并为不同的嵌入交互获得四种深度表示。</li>
+<li><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpiyv58agj30aq02wt8r.jpg" alt=""><ul>
+<li>hj是第j个前馈神经网络学习嵌入交互的深层表示; </li>
+<li>φjl是网络j中的第l层; Wlj，bj l和δlj分别表示网络j中层l的权重矩阵，偏置向量和激活函数;</li>
+<li>z0包括user和item双嵌入的成对拼接。</li>
+</ul>
+</li>
+</ul>
+<h5 id="Fusion-and-Prediciton"><a href="#Fusion-and-Prediciton" class="headerlink" title="Fusion and Prediciton"></a>Fusion and Prediciton</h5><ul>
+<li>融合层位于成对神经交互层之上，其将嵌入交互的四个深度表示组合成单个。 </li>
+<li>融合方案：<ul>
+<li>MLP（DELF-MLP）<ul>
+<li><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpj81rxwbj306c01rwec.jpg" alt=""></li>
+<li>其中Wf，bf，δf分别是权重矩阵，偏差，激活函数; zf是这四个潜在的交互表示的拼接。</li>
+</ul>
+</li>
+<li>经验方案（DELF-EF）<ul>
+<li>根据经验将非均匀的权重分配给四个深度表示</li>
+<li><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpjd7euamj30du02qmx5.jpg" alt=""></li>
+<li>其中λu和λi是要在验证集上调的超参数</li>
+</ul>
+</li>
+<li>最后，融合层的输出hf转换为最终的预测分数</li>
+<li><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fwpjh35m5wj305n019web.jpg" alt=""></li>
+<li>其中Wp，bf分别是权重矩阵和偏差项; δp是sigmoid函数，因为我们期望预测分数在[0,1]。</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/algorithm/" rel="tag"># algorithm</a>
+          
+            <a href="/tags/Recommended-system/" rel="tag"># Recommended system</a>
+          
+            <a href="/tags/Dual-Embedding/" rel="tag"># Dual-Embedding</a>
+          
+            <a href="/tags/Deep-Latent-Factor/" rel="tag"># Deep Latent Factor</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/24/2018-10-24-基于强化学习的推荐/" rel="next" title="A Deep Reinforcement Learning Framework for News Recommendation">
+                <i class="fa fa-chevron-left"></i> A Deep Reinforcement Learning Framework for News Recommendation
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/05/2018-11-5-基于短语级别情感分析的可解释推荐的显式因子模型/" rel="prev" title="Explicit Factor Models for Explainable Recommendation based on Phrase-level Sentiment Analysis">
+                Explicit Factor Models for Explainable Recommendation based on Phrase-level Sentiment Analysis <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Smilexnan</p>
+              <p class="site-description motion-element" itemprop="description">这个人很懒~什么都没有留下~~</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blueschang.github.io/" title="https://blueschang.github.io/" rel="noopener" target="_blank">BlueCode</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://toaco.github.io/" title="https://toaco.github.io/" rel="noopener" target="_blank">Jeffrey‘s Blog</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coder-wen.github.io/" title="https://coder-wen.github.io/" rel="noopener" target="_blank">coderwen的踩坑日记</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#DELF-A-Dual-Embedding-based-Deep-Latent-Factor-Model-for-Recommendation-总结"><span class="nav-number">1.</span> <span class="nav-text">DELF: A Dual-Embedding based Deep Latent Factor Model for Recommendation 总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Abstract"><span class="nav-number">1.1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Introduction"><span class="nav-number">1.2.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Preliminaries"><span class="nav-number">1.3.</span> <span class="nav-text">Preliminaries</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DELF"><span class="nav-number">1.4.</span> <span class="nav-text">DELF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Model"><span class="nav-number">1.4.1.</span> <span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Input-Layer"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">Input Layer</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Embedding-Layer"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">Embedding Layer</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Pairwise-Neural-Interaction-Layers"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">Pairwise Neural Interaction Layers</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Fusion-and-Prediciton"><span class="nav-number">1.4.1.4.</span> <span class="nav-text">Fusion and Prediciton</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Smilexnan</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

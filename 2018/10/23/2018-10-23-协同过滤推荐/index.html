@@ -108,25 +108,25 @@
 
 
 
-  <meta name="description" content="Test$v_i \in R^k$1void">
-<meta name="keywords" content="Smilecode">
+  <meta name="description" content="利用已有用户群过去的行为或意见预测当前用户最可能喜欢哪些东西或对哪些东西感兴趣。存粹的协同过滤方法的输入数据只有给定的用户-物品评分矩阵">
+<meta name="keywords" content="algorithm,Recommended system,Collaborative filtering">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://smilexnan.github.io/2018/11/12/Hello-World-0/index.html">
+<meta property="og:title" content="协同过滤推荐">
+<meta property="og:url" content="http://smilexnan.github.io/2018/10/23/2018-10-23-协同过滤推荐/index.html">
 <meta property="og:site_name" content="SmileCode">
-<meta property="og:description" content="Test$v_i \in R^k$1void">
+<meta property="og:description" content="利用已有用户群过去的行为或意见预测当前用户最可能喜欢哪些东西或对哪些东西感兴趣。存粹的协同过滤方法的输入数据只有给定的用户-物品评分矩阵">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-12T04:25:22.021Z">
+<meta property="og:updated_time" content="2018-11-12T04:59:08.794Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Test$v_i \in R^k$1void">
+<meta name="twitter:title" content="协同过滤推荐">
+<meta name="twitter:description" content="利用已有用户群过去的行为或意见预测当前用户最可能喜欢哪些东西或对哪些东西感兴趣。存粹的协同过滤方法的输入数据只有给定的用户-物品评分矩阵">
 
 
 
 
 
 
-  <link rel="canonical" href="http://smilexnan.github.io/2018/11/12/Hello-World-0/">
+  <link rel="canonical" href="http://smilexnan.github.io/2018/10/23/2018-10-23-协同过滤推荐/">
 
 
 
@@ -136,7 +136,7 @@
   };
 </script>
 
-  <title>Hello World | SmileCode</title>
+  <title>协同过滤推荐 | SmileCode</title>
   
 
 
@@ -373,7 +373,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://smilexnan.github.io/2018/11/12/Hello-World-0/">
+    <link itemprop="mainEntityOfPage" href="http://smilexnan.github.io/2018/10/23/2018-10-23-协同过滤推荐/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Smilexnan">
@@ -390,7 +390,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hello World
+          <h1 class="post-title" itemprop="name headline">协同过滤推荐
               
             
           </h1>
@@ -415,17 +415,47 @@
                 
               
 
-              <time title="创建时间：2018-11-12 11:21:17 / 修改时间：12:25:22" itemprop="dateCreated datePublished" datetime="2018-11-12T11:21:17+08:00">2018-11-12</time>
+              <time title="创建时间：2018-10-23 00:00:00" itemprop="dateCreated datePublished" datetime="2018-10-23T00:00:00+08:00">2018-10-23</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-12 12:59:08" itemprop="dateModified" datetime="2018-11-12T12:59:08+08:00">2018-11-12</time>
               
             
           </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -438,6 +468,8 @@
 
           
 
+          
+              <div class="post-description">利用已有用户群过去的行为或意见预测当前用户最可能喜欢哪些东西或对哪些东西感兴趣。存粹的协同过滤方法的输入数据只有给定的用户-物品评分矩阵</div>
           
 
         </div>
@@ -453,7 +485,80 @@
       
 
       
-        <h2 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h2><p>$v_i \in R^k$<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void</span><br></pre></td></tr></table></figure></p>
+        <blockquote>
+<p>推荐系统</p>
+</blockquote>
+<h1 id="协同过滤推荐"><a href="#协同过滤推荐" class="headerlink" title="协同过滤推荐"></a>协同过滤推荐</h1><p>主要思想</p>
+<ul>
+<li>利用已有用户群过去的行为或意见预测当前用户最可能喜欢哪些东西或对哪些东西感兴趣。</li>
+</ul>
+<p>存粹的协同过滤方法的输入数据只有给定的用户-物品评分矩阵，输出数据一般有以下几种类型</p>
+<ul>
+<li>表示当前用户对物品喜欢或不喜欢程度的预测数值</li>
+<li>n项推荐物品的列表，当然这个top-N列表不会包含当前用户已经购买过的物品</li>
+</ul>
+<h2 id="基于用户的最近邻推荐"><a href="#基于用户的最近邻推荐" class="headerlink" title="基于用户的最近邻推荐"></a>基于用户的最近邻推荐</h2><p>主要思想</p>
+<ul>
+<li>首先，给定一个评分数据集和当前用户的ID作为输入，找出与当前用户过去有相似偏好的其他用户，这些用户有时也被称为对等用户或最近邻；</li>
+<li>然后，对当前用户没有见过的每个产品P，利用其最近邻对P的评分计算预测值。</li>
+<li>这种方法的潜在假设是：<ul>
+<li>如果用户过去有相似的偏好，那么他们未来也会有相似的偏好</li>
+<li>用户偏好不会随时间而变化</li>
+</ul>
+</li>
+</ul>
+<p>几种计算用户之间的相似度的方法</p>
+<ul>
+<li><p>Pearson相关系数衡量用户间的相似度</p>
+<ul>
+<li><p>$$<br>sim(a,b)=\frac{\sum_{p \epsilon P}^{}{(r_{a,p}-r_a)(r_{b,p}-r_b)}}{\sqrt{\sum_{p \epsilon P}^{}{(r_{a,p}-r_a)}^2\sum_{p \epsilon P}^{}{(r_{b,p}-r_b)}^2}}<br>$$</p>
+</li>
+<li><p>$$<br>pred(a,p)=r_a+ \frac{\sum_{b \epsilon N}^{}{sim(a,b)*(r_{b,p}-r_b)}}{\sum_{b \epsilon N}^{}{sim(a,b)}}<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p>改进余弦相似度</p>
+</li>
+<li><p>Spearman秩相关稀疏</p>
+</li>
+<li><p>均方差</p>
+</li>
+</ul>
+<p>对于基于用户的推荐系统来说，Pearson相关系数比其他对比用户的方法更胜一筹，不过，对于后来发现的基于物品的推荐技术，余弦相似度方法比Pearson相关度量表现更好</p>
+<p>为了降低对广受欢迎物品有相同看法的相对重要性，我们对物品的评分进行变换，通过方差权重因子解决该问题。该方法提高了具有高方差评分值物品，也就是指有争议得物品的作用。</p>
+<p>k值（近邻规模）的选择不会影响可预测物品的覆盖率，但是</p>
+<ul>
+<li>当近邻个数k太高，会给预测带来额外的噪声</li>
+<li>当k太小，预测质量也可能受到负面影响</li>
+<li>在大多数情况下，20-50个近邻似乎比较合理</li>
+</ul>
+<h2 id="基于物品的最近邻推荐"><a href="#基于物品的最近邻推荐" class="headerlink" title="基于物品的最近邻推荐"></a>基于物品的最近邻推荐</h2><p>当需要扫描大量潜在近邻时，基于用户的最近邻推荐很难做到实时计算预测值。因此，大型电子商务网站经常采用一种不同的技术：基于物品的最近邻推荐。这种推荐非常适合做线下预处理，因此在频分矩阵非常大的情况下也能做到实时计算推荐。</p>
+<p>主要思想</p>
+<ul>
+<li>利用物品间相似度，而不是用户间相似度来计算预测值。</li>
+</ul>
+<p>在基于物品的推荐方法中，余弦相似度由于效果精确，已经被证实是一种标准的度量体系<br>$$<br>sim(a,b)=\frac{\vec{a}.\vec{b}}{|\vec{a}|*|\vec{b}|}<br>$$<br>考虑用户评分平均值之间的差异，我们使用改进余弦方法（取值在-1到1之间）<br>$$<br>sim(a,b)=\frac{\sum_{u \epsilon U}^{}{(r_{u,a}-r_u)(r_{u,b}-r_u)}}{\sqrt{\sum_{u \epsilon U}^{}{(r_{u,a}-r_u)}^2\sum_{u \epsilon U}^{}{(r_{u,b}-r_u)}^2}}<br>$$</p>
+<p>$$<br>pred(u,p)=\frac{\sum_{i \epsilon ratedItems(u)}^{}{sim(i,p)*r_{u,i}}}{\sum_{i \epsilon ratedItems(u)}^{}{sim(i,p)}}<br>$$</p>
+<h2 id="关于评分"><a href="#关于评分" class="headerlink" title="关于评分"></a>关于评分</h2><p>显式评分即为直接收集用户对物品的评分，通常情况下使用的是五分制或七分制的Likert反馈量表。显式评分的主要问题在于需要推荐系统的用户额外付出，而用户很可能由于看不到好处而不愿意提供这些评分。因此，可用的评分会很少，从而导致推荐质量不高。</p>
+<p>隐式评分即为系统跟踪用户行为，从而收集隐式评分，也不需要用户额外的付出，但还是难以确定用户行为是否被正确解释。</p>
+<h2 id="数据稀疏和冷启动问题"><a href="#数据稀疏和冷启动问题" class="headerlink" title="数据稀疏和冷启动问题"></a>数据稀疏和冷启动问题</h2><p>在实际应用中，由于用户一般只会评价（或购买）少部分物品，评分矩阵一般都非常稀疏。</p>
+<p>冷启动问题是稀疏问题的一个特例，此类问题包括</p>
+<ul>
+<li>如何向还没给任何物品评分的新用户推荐</li>
+<li>如何处理从未被评过分或购买过的物品</li>
+</ul>
+<p>这两类问题都可以通过混合方法来解决，即利用额外的外部信息</p>
+<h2 id="更多基于模型和预处理的方法"><a href="#更多基于模型和预处理的方法" class="headerlink" title="更多基于模型和预处理的方法"></a>更多基于模型和预处理的方法</h2><p>协同推荐技术一般分为两类</p>
+<ul>
+<li>基于记忆的<ul>
+<li>传统的基于用户技术是基于记忆的，这是因为原始的评分数据保存在内存中，直接生成推荐结果</li>
+</ul>
+</li>
+<li>基于模型的<ul>
+<li>基于物品的过滤和某些降维技术，运行前首先会离线处理原始数据，运行时，只需要预计算或“学习过”的模型就能进行预测</li>
+</ul>
+</li>
+</ul>
 
       
     </div>
@@ -475,6 +580,16 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/algorithm/" rel="tag"># algorithm</a>
+          
+            <a href="/tags/Recommended-system/" rel="tag"># Recommended system</a>
+          
+            <a href="/tags/Collaborative-filtering/" rel="tag"># Collaborative filtering</a>
+          
+        </div>
+      
 
       
       
@@ -484,8 +599,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/11/2018-11-11-AFM/" rel="next" title="Atention-driven Factor Model for Explainable Personalized Recommendation">
-                <i class="fa fa-chevron-left"></i> Atention-driven Factor Model for Explainable Personalized Recommendation
+              <a href="/2018/10/19/2018-10-19-递归的三要素/" rel="next" title="递归代码的三要素">
+                <i class="fa fa-chevron-left"></i> 递归代码的三要素
               </a>
             
           </div>
@@ -493,6 +608,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/24/2018-10-24-基于强化学习的推荐/" rel="prev" title="A Deep Reinforcement Learning Framework for News Recommendation">
+                A Deep Reinforcement Learning Framework for News Recommendation <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -671,7 +790,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Test"><span class="nav-number">1.</span> <span class="nav-text">Test</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#协同过滤推荐"><span class="nav-number">1.</span> <span class="nav-text">协同过滤推荐</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基于用户的最近邻推荐"><span class="nav-number">1.1.</span> <span class="nav-text">基于用户的最近邻推荐</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于物品的最近邻推荐"><span class="nav-number">1.2.</span> <span class="nav-text">基于物品的最近邻推荐</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于评分"><span class="nav-number">1.3.</span> <span class="nav-text">关于评分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据稀疏和冷启动问题"><span class="nav-number">1.4.</span> <span class="nav-text">数据稀疏和冷启动问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更多基于模型和预处理的方法"><span class="nav-number">1.5.</span> <span class="nav-text">更多基于模型和预处理的方法</span></a></li></ol></li></ol></div>
             
 
           </div>

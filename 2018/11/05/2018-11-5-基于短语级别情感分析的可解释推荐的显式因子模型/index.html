@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.ico?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.ico?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.ico?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/icon.ico?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="基于短语级别情感分析的可解释推荐显因子模型总结">
+<meta name="keywords" content="algorithm,Recommended system,Explicit Factor Model,Explainable Recommendation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Explicit Factor Models for Explainable Recommendation based on Phrase-level Sentiment Analysis">
+<meta property="og:url" content="http://smilexnan.github.io/2018/11/05/2018-11-5-基于短语级别情感分析的可解释推荐的显式因子模型/index.html">
+<meta property="og:site_name" content="SmileCode">
+<meta property="og:description" content="基于短语级别情感分析的可解释推荐显因子模型总结">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://ws3.sinaimg.cn/large/006rHuSXgy1fwwwxjiap4j30qy0bzgol.jpg">
+<meta property="og:image" content="http://wx1.sinaimg.cn/large/006rHuSXgy1fwwx5ym9o9j30k003igm0.jpg">
+<meta property="og:image" content="http://wx2.sinaimg.cn/large/006rHuSXgy1fwwx6uetscj30jh03v3yt.jpg">
+<meta property="og:image" content="http://wx3.sinaimg.cn/large/006rHuSXgy1fwwx7n2lm3j30jp047t8y.jpg">
+<meta property="og:image" content="http://wx1.sinaimg.cn/large/006rHuSXgy1fwwx9lpx03j30e002qaa7.jpg">
+<meta property="og:image" content="http://ws4.sinaimg.cn/large/006rHuSXgy1fwwxavjvbzj307p01smx1.jpg">
+<meta property="og:image" content="http://wx2.sinaimg.cn/large/006rHuSXgy1fwwxb3z7hzj30jk05gwf5.jpg">
+<meta property="og:image" content="http://ws2.sinaimg.cn/large/006rHuSXgy1fwwxd184v3j30i60j80vk.jpg">
+<meta property="og:updated_time" content="2018-11-12T04:59:26.232Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Explicit Factor Models for Explainable Recommendation based on Phrase-level Sentiment Analysis">
+<meta name="twitter:description" content="基于短语级别情感分析的可解释推荐显因子模型总结">
+<meta name="twitter:image" content="http://ws3.sinaimg.cn/large/006rHuSXgy1fwwwxjiap4j30qy0bzgol.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://smilexnan.github.io/2018/11/05/2018-11-5-基于短语级别情感分析的可解释推荐的显式因子模型/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Explicit Factor Models for Explainable Recommendation based on Phrase-level Sentiment Analysis | SmileCode</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SmileCode</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">采菊东篱下 悠然见南山</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-schedule">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/schedule/" rel="section"><i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>日程表</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://smilexnan.github.io/2018/11/05/2018-11-5-基于短语级别情感分析的可解释推荐的显式因子模型/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Smilexnan">
+      <meta itemprop="description" content="这个人很懒~什么都没有留下~~">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SmileCode">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Explicit Factor Models for Explainable Recommendation based on Phrase-level Sentiment Analysis
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-05 00:00:00" itemprop="dateCreated datePublished" datetime="2018-11-05T00:00:00+08:00">2018-11-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-12 12:59:26" itemprop="dateModified" datetime="2018-11-12T12:59:26+08:00">2018-11-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">基于短语级别情感分析的可解释推荐显因子模型总结</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Explicit-Factor-Models-for-Explainable-Recommendation-based-on-Phrase-level-Sentiment-Analysis总结"><a href="#Explicit-Factor-Models-for-Explainable-Recommendation-based-on-Phrase-level-Sentiment-Analysis总结" class="headerlink" title="Explicit Factor Models for Explainable Recommendation based on Phrase-level Sentiment Analysis总结"></a>Explicit Factor Models for Explainable Recommendation based on Phrase-level Sentiment Analysis总结</h2><blockquote>
+<p>推荐系统<br>可解释推荐<br>情感分析<br>原文网盘分享：链接：<a href="https://pan.baidu.com/s/14LOyEbP3OC1rbz0Vo1s6BA" target="_blank" rel="noopener">https://pan.baidu.com/s/14LOyEbP3OC1rbz0Vo1s6BA</a><br>提取码：0cuc </p>
+</blockquote>
+<h3 id="ABSTRACT"><a href="#ABSTRACT" class="headerlink" title="ABSTRACT"></a>ABSTRACT</h3><ul>
+<li>现有的潜因子模型（LFM）在预测准确性表现良好，但是难以向用户解释推荐结果。</li>
+<li>随着在线用户评论的不断增长，我们考虑通过提取评论中的信息用于推荐。根据评论可以了解到用户对物品的各个方面的关系程度。</li>
+<li>为了能够解释推荐，同时保持较高的准确度，我们提出了显因子模型（EFM）。</li>
+</ul>
+<h3 id="INTRODUCTION"><a href="#INTRODUCTION" class="headerlink" title="INTRODUCTION"></a>INTRODUCTION</h3><ul>
+<li><p>可解释推荐的作用</p>
+<ul>
+<li>在过去几年中，研究人员发现或认为推荐系统中的解释可能非常有益。</li>
+<li>通过解释系统如何工作和/或推荐产品的原因，系统变得更加透明，</li>
+<li>并且有可能让用户知道系统何时出错（可审查），</li>
+<li>增加用户对系统的信心或信任，</li>
+<li>帮助用户做出更好（有效）和更快（效率）的决定，</li>
+<li>说服用户尝试或购买（说服力），</li>
+<li>或增加用户享受的轻松（满意度）。</li>
+</ul>
+</li>
+<li>已经提出了各种技术来生成解释，主要用于基于内容的推荐算法，基于邻居的算法或基于简单统计分析的算法。</li>
+<li>同时，诸如矩阵分解（MF）技术的潜因子模型（LFM）由于其在一些基准数据集上的良好预测精度而受到研究界和工业界的广泛关注。</li>
+<li><p>然而，基于这些算法的推荐系统在实际应用中遇到一些重要问题。</p>
+<ul>
+<li>首先，很难知道用户如何将对项目的各种属性的判断构成单个评级，这使得难以根据用户的特定需求进行推荐。</li>
+<li>其次，通常很难对项目推荐的原因给出直观的解释，甚至更难以解释为什么不推荐使用其他替代项目的项目。</li>
+<li>推荐缺乏可解释性削弱了说服用户并帮助用户在实际系统中做出更好决策的能力。</li>
+<li>潜因子模型，尽管预测精度很好，但是通常很难对项目推荐的原因给出直观的解释，导致缺乏解释性削弱了推荐系统说服用户和帮助用户的能力。</li>
+</ul>
+</li>
+<li><p>因此面临的选择是：</p>
+<ul>
+<li>是选择牺牲准确性而去选择可解释的简单算法</li>
+<li>还是牺牲可解释性而去选择准确的潜因子分解建模算法。</li>
+</ul>
+</li>
+<li>所以一个主要研究问题是：<ul>
+<li>我们能否拥有高度准确且易于解释的解决方案。</li>
+</ul>
+</li>
+<li>本文的解决思路：<ul>
+<li>由于越来越多的用户对产品进行评论，所以我们使用用户评论进行偏好分析。</li>
+<li>我们发现不同用户倾向于评论物品的不同功能。<ul>
+<li>例如，一个人主要关心手机的屏幕尺寸，而另一个人可能会关注其电池寿命，尽管他们甚至可能对产品的星级评分相同。</li>
+<li>从评论中提取明确的产品特征和相应的用户意见不仅有助于理解用户的不同偏好并提出更好的建议</li>
+<li>而且还有助于了解特定项目的原因和方式，从而提供直观的解释。</li>
+</ul>
+</li>
+<li>根据短语级别进行情感分析提取：</li>
+<li>例如，从评论文本中“提供的服务是优秀的，但电池寿命很短”，可以通过短语级情感分析提取形式（F, O, S）的条目（服务，优秀，+ 1）和（电池寿命，短，-1）。<ul>
+<li>其中F代表显示某些产品方面的特征词或短语，</li>
+<li>O代表用户选择表达对特征的态度的意见词或短语， </li>
+<li>评论特征词时，S是观点词的情感，可以是正面的，也可以是负面的。</li>
+</ul>
+</li>
+<li>首先，对文本评论语料库的短语级情感分析生成情感词典，其中每个条目是（F, O, S）三元组，并且特征词一起用作显式特征空间。 </li>
+<li>然后，将这些特征上的用户注意力和item质量集成到统一的分解模型（即EFM）中，后者用于生成个性化的推荐和解释。</li>
+</ul>
+</li>
+</ul>
+<h3 id="RELATED-WORK"><a href="#RELATED-WORK" class="headerlink" title="RELATED WORK"></a>RELATED WORK</h3><ul>
+<li>基于矩阵分解（MF）技术的潜在因子模型（LFM）已经获得了极大的普及，因为它们通常优于传统方法并且已经在一些基准数据集中实现了最佳性能。</li>
+<li>如今的各种MF算法：<ul>
+<li>例如奇异值分解（SVD）</li>
+<li>非负矩阵分解（NMF）</li>
+<li>最大边缘矩阵分解（MMMF）</li>
+<li>概率矩阵分解（PMF）</li>
+<li>局部矩阵分解（ LMF）</li>
+</ul>
+</li>
+<li>他们的目标是从用户项目评级矩阵中学习潜在因素，以进行评级预测，并根据这些因素生成个性化建议。</li>
+<li>问题是：当我们已经知道用户关心某些特定产品特征的时候，难以根据MF的潜在特征提出建议。</li>
+<li>随着用户评论的增多，我们考虑对用户评论进行情感分析，从而进行推荐。</li>
+<li>情感分析可以在三个不同的层面上进行：综述/文档级别，句子级别和短语级别。 <ul>
+<li>review-level 和 sentence-level: 分析尝试将整个评论或句子的情绪分类为预定义的情绪。（正面，负面，中立）</li>
+<li>sentence-level:试图分析提取产品的显式特征，并基于用户用来表达对特征的态度的观点词，进一步分析用户对这些特征表达的情感倾向。构建情绪词典（F，O，S）(Feature,Opinion,Sentiment) </li>
+</ul>
+</li>
+<li>我们利用短语级情感分析来模拟用户偏好和项目表现在明确的特征/方面，以获得更详细的用户偏好建模，更准确的预测和更直观的解释。</li>
+<li>利用显式特征进行推荐的一个重要优势是它能够为推荐和推荐的项目提供直观和合理的解释。</li>
+</ul>
+<h3 id="THE-FRAMEWORK"><a href="#THE-FRAMEWORK" class="headerlink" title="THE FRAMEWORK"></a>THE FRAMEWORK</h3><ul>
+<li>符号解释<ul>
+<li><img src="http://ws3.sinaimg.cn/large/006rHuSXgy1fwwwxjiap4j30qy0bzgol.jpg" alt="image"></li>
+</ul>
+</li>
+</ul>
+<h4 id="Sentiment-Lexicon-Construction"><a href="#Sentiment-Lexicon-Construction" class="headerlink" title="Sentiment Lexicon Construction"></a>Sentiment Lexicon Construction</h4><ul>
+<li>构建情感词典<ul>
+<li>首先，使用语法分析工具从文本评论中提取特征词集合F</li>
+<li>然后，提取观点词集合O，并在可能的情况下与特征词进行配对，生成（F,O）</li>
+<li>最后，基于优化框架对这些情感词词性进行标记，并为每队（F，O）分配情感值S，生成（F，O，S）</li>
+</ul>
+</li>
+</ul>
+<h4 id="Feature-Opinion-Pair-Mapping"><a href="#Feature-Opinion-Pair-Mapping" class="headerlink" title="Feature-Opinion Pair Mapping"></a>Feature-Opinion Pair Mapping</h4><ul>
+<li>给定一个情感词典L和一段文本评论，我们生成一组特征情感（F，S）对来表示评论。</li>
+<li>同时我们要判断情感对是否被否定词反转，如果被反转则情感对也要被反转。</li>
+<li><img src="http://wx1.sinaimg.cn/large/006rHuSXgy1fwwx5ym9o9j30k003igm0.jpg" alt="image"></li>
+</ul>
+<h4 id="User-Feature-Attention-Matrix"><a href="#User-Feature-Attention-Matrix" class="headerlink" title="User-Feature Attention Matrix"></a>User-Feature Attention Matrix</h4><ul>
+<li>我们假设不同的用户可能关心不同的功能，他们倾向于更频繁地评论他或她特别关心的功能。 </li>
+<li>因此，我们构建用户特征关注矩阵X，其中每个元素测量用户关心相应产品特征/方面的程度。 </li>
+<li>构建user-Feature矩阵，最后使用sigmoid函数进行归一化。</li>
+<li><img src="http://wx2.sinaimg.cn/large/006rHuSXgy1fwwx6uetscj30jh03v3yt.jpg" alt="image"></li>
+</ul>
+<h4 id="Item-Feature-Quality-Matrix"><a href="#Item-Feature-Quality-Matrix" class="headerlink" title="Item-Feature Quality Matrix"></a>Item-Feature Quality Matrix</h4><ul>
+<li>item特征质量矩阵Y：</li>
+<li>每个元素测量相应产品特征/方面的item质量</li>
+<li>我们通过item p 的所有的评论提取特征对（F，S）</li>
+<li>假设item p的特征Fj被提及k次，这k次提取的Fj的平均情感是sij</li>
+<li>最后进行归一化。</li>
+<li><img src="http://wx3.sinaimg.cn/large/006rHuSXgy1fwwx7n2lm3j30jp047t8y.jpg" alt="image"></li>
+</ul>
+<h4 id="Integrating-Explicit-Implicit-Feature"><a href="#Integrating-Explicit-Implicit-Feature" class="headerlink" title="Integrating Explicit Implicit Feature"></a>Integrating Explicit Implicit Feature</h4><ul>
+<li>整合显式和隐式特征 </li>
+<li>目的：如何将这些集成到分解模型中，以获得准确的预测和可解释的建议。</li>
+<li>可以像分解user-item矩阵一样，分别分解user-feature X 和item-feature Y,</li>
+<li>这意味着可以基于user-feature 和item-feature 来建立user，item，feature的隐表示。</li>
+<li><img src="http://wx1.sinaimg.cn/large/006rHuSXgy1fwwx9lpx03j30e002qaa7.jpg" alt="image"></li>
+<li>我们使用潜表示U1和U2分别表示，user 和item在明确的product feature上关注意程度。 </li>
+<li>考虑到显式特征可能无法完成解释评分，我们引入了r的潜因子 H1和H2，并且使用P=[U1,H1]和Q=[U2,H2] 来建模整体的评分矩阵A</li>
+<li><img src="http://ws4.sinaimg.cn/large/006rHuSXgy1fwwxavjvbzj307p01smx1.jpg" alt="image"></li>
+<li><img src="http://wx2.sinaimg.cn/large/006rHuSXgy1fwwxb3z7hzj30jk05gwf5.jpg" alt="image"></li>
+<li>当r = 0时，该模型简化为用户项目评级矩阵A上的传统潜在因子分解模型，这意味着显式特征不用于推荐。</li>
+</ul>
+<h4 id="Model-Learning-for-EFM"><a href="#Model-Learning-for-EFM" class="headerlink" title="Model Learning for EFM"></a>Model Learning for EFM</h4><ul>
+<li>输入：<ul>
+<li>A:原始评分矩阵</li>
+<li>X:user-feature 矩阵</li>
+<li>Y:item-feature 矩阵</li>
+<li>m:用户个数</li>
+<li>n:item个数</li>
+<li>p:feature个数</li>
+<li>r:显因子的数量</li>
+<li>r’:潜因子的数量</li>
+<li>λx ，λy ： regularization coefficients 正则化系数</li>
+</ul>
+</li>
+<li><img src="http://ws2.sinaimg.cn/large/006rHuSXgy1fwwxd184v3j30i60j80vk.jpg" alt="image"></li>
+</ul>
+<h4 id="Personalized-Recommendation"><a href="#Personalized-Recommendation" class="headerlink" title="Personalized Recommendation"></a>Personalized Recommendation</h4><ul>
+<li>基于已有的公式，我们可以生成个性化top-K推荐并提供特征解释</li>
+<li>我们取用户最关注的k个item 特征进行推荐</li>
+<li>其中N = max（Aij）用于重新缩放第一部分，在大多数评级系统中N = 5。 </li>
+<li>第一部分是基于用户ui关心的k个最重要的产品特征的用户项目相似性得分。 0≤α≤1是控制基于特征的分数和直接用户项评级之间的权衡的比例。</li>
+<li>综合用户直接的评分和显因子评分进行推荐</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/algorithm/" rel="tag"># algorithm</a>
+          
+            <a href="/tags/Recommended-system/" rel="tag"># Recommended system</a>
+          
+            <a href="/tags/Explicit-Factor-Model/" rel="tag"># Explicit Factor Model</a>
+          
+            <a href="/tags/Explainable-Recommendation/" rel="tag"># Explainable Recommendation</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/29/2018-10-29-基于双嵌入的潜因子推荐模型/" rel="next" title="A Dual-Embedding based Deep Latent Factor Model for Recommendation">
+                <i class="fa fa-chevron-left"></i> A Dual-Embedding based Deep Latent Factor Model for Recommendation
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/11/2018-11-11-AFM/" rel="prev" title="Atention-driven Factor Model for Explainable Personalized Recommendation">
+                Atention-driven Factor Model for Explainable Personalized Recommendation <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Smilexnan</p>
+              <p class="site-description motion-element" itemprop="description">这个人很懒~什么都没有留下~~</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blueschang.github.io/" title="https://blueschang.github.io/" rel="noopener" target="_blank">BlueCode</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://toaco.github.io/" title="https://toaco.github.io/" rel="noopener" target="_blank">Jeffrey‘s Blog</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coder-wen.github.io/" title="https://coder-wen.github.io/" rel="noopener" target="_blank">coderwen的踩坑日记</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Explicit-Factor-Models-for-Explainable-Recommendation-based-on-Phrase-level-Sentiment-Analysis总结"><span class="nav-number">1.</span> <span class="nav-text">Explicit Factor Models for Explainable Recommendation based on Phrase-level Sentiment Analysis总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ABSTRACT"><span class="nav-number">1.1.</span> <span class="nav-text">ABSTRACT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#INTRODUCTION"><span class="nav-number">1.2.</span> <span class="nav-text">INTRODUCTION</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RELATED-WORK"><span class="nav-number">1.3.</span> <span class="nav-text">RELATED WORK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#THE-FRAMEWORK"><span class="nav-number">1.4.</span> <span class="nav-text">THE FRAMEWORK</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sentiment-Lexicon-Construction"><span class="nav-number">1.4.1.</span> <span class="nav-text">Sentiment Lexicon Construction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Feature-Opinion-Pair-Mapping"><span class="nav-number">1.4.2.</span> <span class="nav-text">Feature-Opinion Pair Mapping</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#User-Feature-Attention-Matrix"><span class="nav-number">1.4.3.</span> <span class="nav-text">User-Feature Attention Matrix</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Item-Feature-Quality-Matrix"><span class="nav-number">1.4.4.</span> <span class="nav-text">Item-Feature Quality Matrix</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Integrating-Explicit-Implicit-Feature"><span class="nav-number">1.4.5.</span> <span class="nav-text">Integrating Explicit Implicit Feature</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Model-Learning-for-EFM"><span class="nav-number">1.4.6.</span> <span class="nav-text">Model Learning for EFM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Personalized-Recommendation"><span class="nav-number">1.4.7.</span> <span class="nav-text">Personalized Recommendation</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Smilexnan</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
