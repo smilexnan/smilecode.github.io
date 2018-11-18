@@ -112,7 +112,7 @@
 <meta name="keywords" content="algorithm,Recommended system,Sequential Recommender">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Recurrent Collaborative Filtering for Unifying General and Sequential Recommender">
-<meta property="og:url" content="http://smilexnan.github.io/2018/11/18/Recurrent Collaborative Filtering for Unifying General and Sequential Recommender /index.html">
+<meta property="og:url" content="http://smilexnan.github.io/2018/11/18/2018-11-18-RCF/index.html">
 <meta property="og:site_name" content="SmileCode">
 <meta property="og:description" content="用于统一通用和序列推荐的循环协同过滤">
 <meta property="og:locale" content="zh-CN">
@@ -120,7 +120,7 @@
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fxciu7r439j30cu01o3ye.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fxcityxe1rj30eb01wjrd.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fxciv9iwynj30d704974j.jpg">
-<meta property="og:updated_time" content="2018-11-18T13:17:28.738Z">
+<meta property="og:updated_time" content="2018-11-18T13:31:18.403Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Recurrent Collaborative Filtering for Unifying General and Sequential Recommender">
 <meta name="twitter:description" content="用于统一通用和序列推荐的循环协同过滤">
@@ -131,7 +131,7 @@
 
 
 
-  <link rel="canonical" href="http://smilexnan.github.io/2018/11/18/Recurrent Collaborative Filtering for Unifying General and Sequential Recommender /">
+  <link rel="canonical" href="http://smilexnan.github.io/2018/11/18/2018-11-18-RCF/">
 
 
 
@@ -310,7 +310,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://smilexnan.github.io/2018/11/18/Recurrent Collaborative Filtering for Unifying General and Sequential Recommender /">
+    <link itemprop="mainEntityOfPage" href="http://smilexnan.github.io/2018/11/18/2018-11-18-RCF/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Smilexnan">
@@ -352,7 +352,7 @@
                 
               
 
-              <time title="创建时间：2018-11-18 00:00:00 / 修改时间：21:17:28" itemprop="dateCreated datePublished" datetime="2018-11-18T00:00:00+08:00">2018-11-18</time>
+              <time title="创建时间：2018-11-18 00:00:00 / 修改时间：21:31:18" itemprop="dateCreated datePublished" datetime="2018-11-18T00:00:00+08:00">2018-11-18</time>
             
 
             
@@ -451,11 +451,15 @@
 <table>
 <thead>
 <tr>
-<th style="text-align:left">R=N×M</th>
-<th>user-item矩阵</th>
+<th style="text-align:left">符号</th>
+<th>含义</th>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td style="text-align:left">R=N×M</td>
+<td>user-item矩阵</td>
+</tr>
 <tr>
 <td style="text-align:left">$r_{ij} \in $ { $0,1$ }</td>
 <td>$user$ $i$ 和$item$ $j$ 是否交互</td>
@@ -497,8 +501,7 @@
 <td>$user$ $i$ 的交互序列</td>
 </tr>
 <tr>
-<td style="text-align:left">$P(x_i^{(t)}</td>
-<td>x_i^{(&lt;t)})$</td>
+<td style="text-align:left">$ P(x_i^{(t)} ︱ x_i^{(&lt;t)}) $</td>
 <td>该$item$ 根据之前$item$ 所训练后的被推荐的条件概率</td>
 </tr>
 <tr>
