@@ -108,29 +108,27 @@
 
 
 
-  <meta name="description" content="用于推荐的基于Users和Items评论的联合深度模型">
-<meta name="keywords" content="algorithm,Recommended system,Deep neural network">
+  <meta name="description" content="基于分层注意力网络的顺序推荐系统">
+<meta name="keywords" content="algorithm,Recommended system,Sequential Recommender">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Joint Deep Modeling of Users and Items Using Reviews for Recommendation">
-<meta property="og:url" content="http://smilexnan.github.io/2018/11/12/2018-11-12-JDM/index.html">
+<meta property="og:title" content="Sequential Recommender System based on Hierarchical Attention Network">
+<meta property="og:url" content="http://smilexnan.github.io/2018/11/18/2018-11-18-SHAN/index.html">
 <meta property="og:site_name" content="SmileCode">
-<meta property="og:description" content="用于推荐的基于Users和Items评论的联合深度模型">
+<meta property="og:description" content="基于分层注意力网络的顺序推荐系统">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fx5lvf0acxj30f80c6q4n.jpg">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fx5mbv9owaj30k80igwgc.jpg">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fx5opmdd1bj30dc02r3yf.jpg">
-<meta property="og:updated_time" content="2018-11-12T15:43:57.129Z">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fxckww8hfqj30qj0aqabt.jpg">
+<meta property="og:updated_time" content="2018-11-18T15:28:58.180Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Joint Deep Modeling of Users and Items Using Reviews for Recommendation">
-<meta name="twitter:description" content="用于推荐的基于Users和Items评论的联合深度模型">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fx5lvf0acxj30f80c6q4n.jpg">
+<meta name="twitter:title" content="Sequential Recommender System based on Hierarchical Attention Network">
+<meta name="twitter:description" content="基于分层注意力网络的顺序推荐系统">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fxckww8hfqj30qj0aqabt.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://smilexnan.github.io/2018/11/12/2018-11-12-JDM/">
+  <link rel="canonical" href="http://smilexnan.github.io/2018/11/18/2018-11-18-SHAN/">
 
 
 
@@ -140,7 +138,7 @@
   };
 </script>
 
-  <title>Joint Deep Modeling of Users and Items Using Reviews for Recommendation | SmileCode</title>
+  <title>Sequential Recommender System based on Hierarchical Attention Network | SmileCode</title>
   
 
 
@@ -309,7 +307,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://smilexnan.github.io/2018/11/12/2018-11-12-JDM/">
+    <link itemprop="mainEntityOfPage" href="http://smilexnan.github.io/2018/11/18/2018-11-18-SHAN/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Smilexnan">
@@ -326,7 +324,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Joint Deep Modeling of Users and Items Using Reviews for Recommendation
+          <h1 class="post-title" itemprop="name headline">Sequential Recommender System based on Hierarchical Attention Network
               
             
           </h1>
@@ -351,7 +349,7 @@
                 
               
 
-              <time title="创建时间：2018-11-12 00:00:00 / 修改时间：23:43:57" itemprop="dateCreated datePublished" datetime="2018-11-12T00:00:00+08:00">2018-11-12</time>
+              <time title="创建时间：2018-11-18 00:00:00 / 修改时间：23:28:58" itemprop="dateCreated datePublished" datetime="2018-11-18T00:00:00+08:00">2018-11-18</time>
             
 
             
@@ -393,7 +391,7 @@
           
 
           
-              <div class="post-description">用于推荐的基于Users和Items评论的联合深度模型</div>
+              <div class="post-description">基于分层注意力网络的顺序推荐系统</div>
           
 
         </div>
@@ -411,100 +409,99 @@
       
         <blockquote>
 <p>推荐系统</p>
-<p>原文网盘分享：链接：<a href="https://pan.baidu.com/s/19SnwvU93VRPAdxSBozICEw" target="_blank" rel="noopener">https://pan.baidu.com/s/19SnwvU93VRPAdxSBozICEw</a> </p>
-<p>密码：zfhm</p>
+<p>链接：<a href="https://pan.baidu.com/s/1FG_t8fWJaPnKrXNOw44U-g" target="_blank" rel="noopener">https://pan.baidu.com/s/1FG_t8fWJaPnKrXNOw44U-g</a> 密码：l4t0</p>
 </blockquote>
-<h2 id="Joint-Deep-Modeling-of-Users-and-Items-Using-Reviews"><a href="#Joint-Deep-Modeling-of-Users-and-Items-Using-Reviews" class="headerlink" title="Joint Deep Modeling of Users and Items Using Reviews"></a>Joint Deep Modeling of Users and Items Using Reviews</h2><p>用于推荐的基于Users和Items评论的联合深度模型</p>
-<h4 id="协同过滤推荐"><a href="#协同过滤推荐" class="headerlink" title="协同过滤推荐"></a>协同过滤推荐</h4><ul>
-<li>基本思想：过去具有相同偏好的人往往会有类似的选择</li>
-<li>矩阵分解技术是协同过滤推荐中的重要分支</li>
-<li>问题：<ul>
-<li>数据稀疏性(当用户评分的item与总item无关的时候，就会出现稀疏性问题)<ul>
-<li>协同过滤不容易向评分较少的用户提供推荐</li>
-<li>协同过滤不容易吧评分较少的item推荐给用户</li>
+<h2 id="Sequential-Recommender-System-based-on-Hierarchical-Attention-Network"><a href="#Sequential-Recommender-System-based-on-Hierarchical-Attention-Network" class="headerlink" title="Sequential Recommender System based on Hierarchical Attention Network"></a>Sequential Recommender System based on Hierarchical Attention Network</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><h4 id="当前的一些推荐场景"><a href="#当前的一些推荐场景" class="headerlink" title="当前的一些推荐场景"></a>当前的一些推荐场景</h4><ul>
+<li>与传统推荐系统不同，顺序推荐方案存在新的挑战。首先，除了显式反馈（例如：评分）之外，一些场景中的用户行为仅反映其隐式反馈（例如：购买或不购买）。这种类型的数据带来了更多的噪声，因为我们无法区分用户是否不喜欢未观察到的项目或者知识没有意识到这些项目。因此，通过传统的潜在因子模型直接优化这种一类分数（即1或0）是不合适的。其次，越来越多的数据来自会话或交易，形成用户的顺序模式和短期偏好。</li>
 </ul>
-</li>
+<h4 id="顺序推荐的研究"><a href="#顺序推荐的研究" class="headerlink" title="顺序推荐的研究"></a>顺序推荐的研究</h4><ul>
+<li>在文献中，研究人员通常使用单独的模型来表示用户的长期偏好和短期偏好，然后将它们整合在一起。然而，这些模型忽略了用户一般品味的动态，这意味着用户的长期偏好会随着时间的推移而不断变化。为每个用户学习静态低秩矢量来模仿她的长期偏好是不够的。此外，它们主要通过线性建模为user-item或item-item交互分配固定权重，这限制了模型能力。已经证明，非线性模型可以更好地模拟用户活动中的user-item交互。</li>
 </ul>
-</li>
-<li>一种方法是：<ul>
-<li>除了数字评分外，使用用户的评论作为推荐的原因之一。<ul>
-<li>评论可以用于缓解稀疏性问题。</li>
+<h4 id="本文的方法"><a href="#本文的方法" class="headerlink" title="本文的方法"></a>本文的方法</h4><ul>
+<li>本文提出了一种顺序分层注意网络（SHAN），以解决下一个item推荐问题。注意力机制可以自动为用户分配item的不同影响以捕获动态属性，而层次结构结合用户的长期和短期偏好。具体来说，我们首先将user和item嵌入到低维密集空间中。然后，使用注意力层来计算用户长期集中的item的不同权重，然后用权重压缩item向量以生成用户长期表示。之后，我们使用另一个注意力层将用户顺序行为与长期表示相结合。用户嵌入向量用作两个关注网络中的上下文信息，以计算不同用户的不同权重。为了学习这些参数，我们采用贝叶斯个性化排名优化标准来生成成对损失函数。</li>
 </ul>
-</li>
+<h4 id="本文的贡献"><a href="#本文的贡献" class="headerlink" title="本文的贡献"></a>本文的贡献</h4><ul>
+<li>我们引入注意力机制来模拟用户动态和顺序推荐的个人偏好。</li>
+<li>通过层次结构，我们将用户的长期和短期偏好结合起来，生成用户的高级混合表示。</li>
 </ul>
-</li>
-</ul>
-<h4 id="本文提出一种基于神经网络的模型，称为深度协同神经网络-DeepCoNN"><a href="#本文提出一种基于神经网络的模型，称为深度协同神经网络-DeepCoNN" class="headerlink" title="本文提出一种基于神经网络的模型，称为深度协同神经网络(DeepCoNN)"></a>本文提出一种基于神经网络的模型，称为深度协同神经网络(DeepCoNN)</h4><ul>
-<li>使用评论文本对user和item进行联合建模。</li>
-<li>所提出的模型使用两个耦合的神经网络共同学习user和item的潜特征，使得评分预测准确性最大化。</li>
-<li>本文的贡献<ul>
-<li>据作者所知：DeepCoNN是第一个使用神经网络联合训练user和item的人</li>
-<li>DeepCoNN使用预先训练的深层模型将评论文本表示为字嵌入向量</li>
-<li>DeepCoNN不仅利用评论来缓解数据稀疏问题，而且显著提高了推荐系统的整体性能。</li>
-</ul>
-</li>
+<h3 id="Sequential-Hierarchiacl-Attention-Network"><a href="#Sequential-Hierarchiacl-Attention-Network" class="headerlink" title="Sequential Hierarchiacl Attention Network"></a>Sequential Hierarchiacl Attention Network</h3><ul>
 <li>符号定义</li>
-<li>一组训练集$\tau$由$N$个元组组成，每个元组$(u,i,r_{ui},w_{ui})$表示$user$ $u$ 为$item$ $i$ 的评分$r_{ui}$和评论文本$w_{ui}$</li>
-<li><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fx5lvf0acxj30f80c6q4n.jpg" alt=""></li>
-<li>DeepCoNN模型如下图</li>
-<li><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fx5mbv9owaj30k80igwgc.jpg" alt=""></li>
-<li>Loop-Up层<ul>
-<li>评论被表示为单词嵌入的矩阵以提取语义信息</li>
-<li>词嵌入的函数$M → ℜn $ ，其中$M$ 表示单词的字典。是将单词映射到$n$维分布向量的参数化函数。</li>
-<li>为了实现它，$user$ $u$ 的评论的所有评论被合并到一个文本向量$d_{1:n}^u$中，它由$n$个单词组成。</li>
-<li>就可以为$user$ $u$ 构建一个词向量矩阵$V_{1:n}^u$ :<ul>
-<li>$V_{1:n}^u= \phi(d_1^u) \bigoplus\phi(d_2^u) \bigoplus\phi(d_3^u) \bigoplus … \bigoplus\phi(d_n^u) $</li>
-<li>其中$d_k^u$ 表示文档$d_{1:n}^u$ 的第$k$个字</li>
-<li>查找函数$ \phi(d_k^u) $ 返回单词$d_k^u$ 相应的$c$维词向量, $\bigoplus$ 是连接符</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$U$</td>
+<td>用户的集合</td>
+</tr>
+<tr>
+<td>$V$</td>
+<td>item的集合</td>
+</tr>
+<tr>
+<td>$L^u=$ { $S_1^u,S_2^u,…,S_T^u$ }</td>
+<td>用户$u \in U$ 的连续交互集合</td>
+</tr>
+<tr>
+<td>$S_t^u  \subseteq V(t \in [1,T])$</td>
+<td>用户$u$ 在$t$ 时刻与之交互的$item$ 集合</td>
+</tr>
+<tr>
+<td>$S_t^u$</td>
+<td>可以反映用户$u$在$t$时刻的短期偏好</td>
+</tr>
+<tr>
+<td>$L_{t-1}^u = S_1^u \bigcup S_2^u \bigcup…\bigcup S_{t-1}^u $</td>
+<td>时间$t$之前用户$u$所产生交互的$item$集合</td>
+</tr>
+<tr>
+<td>$L_{t-1}^u$</td>
+<td>可以反映用户的长期偏好</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>本文根据用户偏好的以下特征，提出一种基于分层的注意力网络，模型图如下<ul>
+<li>用户偏好在不同的时间步长是动态的。 </li>
+<li>不同的item对下一个要购买的item有不同的影响。</li>
+<li>对于不同的用户，相同的item可能对下一个item预测有不同的影响。</li>
+</ul>
+</li>
+<li><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fxckww8hfqj30qj0aqabt.jpg" alt=""></li>
+<li><strong>Embedding Layer</strong><ul>
+<li>使用全连接层将用户和itemID的ont-hot表示嵌入到两个连续的低纬空间中。</li>
+<li>形式上，让$U \in \mathbb{R}^{K×|u|}$和$V \in \mathbb{R}^{K×|v|}$ 两个矩阵分别表示user和item的嵌入</li>
+</ul>
+</li>
+<li><strong>Long-term Attention-based Pooling Layer</strong> <ul>
+<li>由于用户的长期item集通常随时间变化，因此学习每个用户的静态的长期偏好表示不能完全表达用户长期以来的偏好的动态性。 另一方面，从最新的长期item集重建长期用户表示更合理。 此外，我们认为相同的item可能会对不同的用户产生不同的影响。</li>
+<li>为了满足上述要求，我们建议使用已经成功应用于许多任务的注意机制，它首先计算给定用户的长期item集中每个item的重要性，然后聚合这些item的嵌入以形成长期用户偏好表示。<ul>
+<li>$h_{1j}= \phi (W_1v_j+b_1)$</li>
+<li>$\alpha_j= \frac{exp(u^┬h_{1j})}{ \sum_{p \in L_{t-1}^u} exp(u^┬h_{1p}) }$</li>
+</ul>
+</li>
+<li>最后，我们将长期用户表示$u_{t-1}^{long}$计算为注意分数加权的item嵌入的总和<ul>
+<li>$u_{t-1}^{long} = \sum_{j \in L_{t-1}^u} \alpha_jv_j$</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>CNN层(包括卷积层、最大池化层和全连接层)<ul>
-<li>卷积层<ul>
-<li>卷积层由$m$个神经元组成</li>
-<li>这些神经元通过在$user$ $u$ 的词向量$V_{1:n}^u$应用卷积运算符来生成新的特征。</li>
-<li>卷积层中的每个神经元$j$ 在大小为$t$ 的单词窗口上使用滤波器$K_j ∈ ℜ^{c×t} $</li>
-<li>对于$V_{1:n}^u$ 我们对卷积层中的每个内核$K_j$进行卷积运算</li>
-<li>$z_j=f(V_{1:n}^u*K_j+b_j)$<ul>
-<li>这里$*$是卷积运算符，$b_j$是偏置项，$f$是激活函数</li>
-<li>激活函数使用ReLUs(Rectified Linear Units) </li>
+<li><strong>Long- and Short-term Attention-based Pooling Layer</strong> <ul>
+<li>短期偏好对于预测下一个item非常重要，并且已经开展了关于将顺序推荐的长期和短期偏好相结合的研究。 然而，短期和长期偏好的相互作用仍然是线性的，并且item在早期工作中被赋予相同的权重，这不能反映item对下一项预测的影响特征，因此限制了模型性能。 与建模用户长期偏好类似，我们也转向注意力网络，为长期表示分配权重以及在短期item集中嵌入item，以捕获用户的高级表示。</li>
+<li>$ h_{2j}= \phi (W_2 x_j+b_2) $</li>
+<li>$\beta_j= \frac{exp(u^┬h_{2j})}{ \sum_{p \in S_t^u \bigcup {0}} exp(u^┬h_{2p}) } $</li>
+<li>最后，我们将混合用户表示为$u_t^{hubrid}=\beta_0u_{t-1}^{long}+ \sum _{j \in S_t^u} \beta_jv_j$ </li>
 </ul>
 </li>
+<li>在计算用户混合表示$u_t^{hybrid}$之后，我们使用传统的潜在因子模型来计算他的item $j$的偏好得分如下:<ul>
+<li>$R_{ujt} = u_t^{hybrid}v_j​$</li>
 </ul>
 </li>
-<li>最大池化层<ul>
-<li>最大池化操作，在特征映射上，将最大值作为与此特定内核对应的特征。</li>
-<li>池化操作后，卷积结果被减少到固定大小的向量。</li>
-<li>$f(x)=max ${$0,x$}</li>
-<li>上述是一个从内核中提取一个特征的过程，该模型使用多个滤波器来获取各种特征，并且输出$O=${$o_1,o_2,o_3,…,o_{n_1}$}</li>
-<li>其中$n_1$表示卷积层中的内核数</li>
-</ul>
-</li>
-<li>全连接层<ul>
-<li>最大池化层得到的结果$O$被传递到具有权重矩阵$W$的全连接层</li>
-<li>全连接层的输入$X_u ∈ ℜ^{n_2×1} $ 是用户$u$的特征</li>
-<li>$X_u = f(W × O + g)$</li>
-<li>最后可以获得$user$和$item$ 卷积后的输入$x_u$ $y_i$ </li>
-</ul>
-</li>
-</ul>
-</li>
-<li>共享层<ul>
-<li>虽然这些输出可以被视为用户和项目的特征，但它们可以处于不同的特征空间中而不具有可比性。 因此，为了将它们映射到相同的特征空间，我们在顶部引入了一个共享层来连接$Net_u$和$Net_i$。<ul>
-<li>我们将$x_u$ $y_i$连接成单个向量$z=(x_u,y_i)$</li>
-<li>为了模拟$z$中的所有嵌套变量交互，我们引入分解机(FM)估计相应的评分</li>
-<li><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fx5opmdd1bj30dc02r3yf.jpg" alt=""></li>
-<li>其中$\omega_0$ 是全局偏差，$w_i$是第$i$个$z_i$的权重,$&lt;V_i,V_j&gt;$模拟二阶交互。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="DeepCoNN的一些优点"><a href="#DeepCoNN的一些优点" class="headerlink" title="DeepCoNN的一些优点"></a>DeepCoNN的一些优点</h4><ul>
-<li>大多数在建模过程中使用评论的推荐系统采用主题建模技术来对用户或项目进行建模。主题建模技术使用词袋来推断潜在主题变量，其中忽略词序。</li>
-<li>但是，在许多文本建模应用程序中，单词顺序至关重要。</li>
-<li>DeepCoNN不是基于主题建模，而是使用单词嵌入来创建单词向量矩阵，其中单词的顺序被保留。通过这种方式，卷积运算利用了数据的内部结构，并提供了一种在文本建模中有效使用单词顺序的机制。</li>
 </ul>
 
       
@@ -533,7 +530,7 @@
           
             <a href="/tags/Recommended-system/" rel="tag"># Recommended system</a>
           
-            <a href="/tags/Deep-neural-network/" rel="tag"># Deep neural network</a>
+            <a href="/tags/Sequential-Recommender/" rel="tag"># Sequential Recommender</a>
           
         </div>
       
@@ -546,8 +543,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/11/2018-11-11-AFM/" rel="next" title="Atention-driven Factor Model for Explainable Personalized Recommendation">
-                <i class="fa fa-chevron-left"></i> Atention-driven Factor Model for Explainable Personalized Recommendation
+              <a href="/2018/11/12/2018-11-12-JDM/" rel="next" title="Joint Deep Modeling of Users and Items Using Reviews for Recommendation">
+                <i class="fa fa-chevron-left"></i> Joint Deep Modeling of Users and Items Using Reviews for Recommendation
               </a>
             
           </div>
@@ -556,8 +553,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/18/2018-11-18-SHAN/" rel="prev" title="Sequential Recommender System based on Hierarchical Attention Network">
-                Sequential Recommender System based on Hierarchical Attention Network <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/18/2018-11-18-RCF/" rel="prev" title="Recurrent Collaborative Filtering for Unifying General and Sequential Recommender">
+                Recurrent Collaborative Filtering for Unifying General and Sequential Recommender <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -741,7 +738,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Joint-Deep-Modeling-of-Users-and-Items-Using-Reviews"><span class="nav-number">1.</span> <span class="nav-text">Joint Deep Modeling of Users and Items Using Reviews</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#协同过滤推荐"><span class="nav-number">1.0.1.</span> <span class="nav-text">协同过滤推荐</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本文提出一种基于神经网络的模型，称为深度协同神经网络-DeepCoNN"><span class="nav-number">1.0.2.</span> <span class="nav-text">本文提出一种基于神经网络的模型，称为深度协同神经网络(DeepCoNN)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DeepCoNN的一些优点"><span class="nav-number">1.0.3.</span> <span class="nav-text">DeepCoNN的一些优点</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Sequential-Recommender-System-based-on-Hierarchical-Attention-Network"><span class="nav-number">1.</span> <span class="nav-text">Sequential Recommender System based on Hierarchical Attention Network</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#当前的一些推荐场景"><span class="nav-number">1.1.1.</span> <span class="nav-text">当前的一些推荐场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#顺序推荐的研究"><span class="nav-number">1.1.2.</span> <span class="nav-text">顺序推荐的研究</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本文的方法"><span class="nav-number">1.1.3.</span> <span class="nav-text">本文的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本文的贡献"><span class="nav-number">1.1.4.</span> <span class="nav-text">本文的贡献</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sequential-Hierarchiacl-Attention-Network"><span class="nav-number">1.2.</span> <span class="nav-text">Sequential Hierarchiacl Attention Network</span></a></li></ol></li></ol></div>
             
 
           </div>
