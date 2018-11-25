@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.ico?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.ico?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.ico?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/icon.ico?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="有判别的利用用户行为进行下一item的推荐">
+<meta name="keywords" content="algorithm,Recommended system,Sequential Recommender">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Next-item Recommendation via Discriminatively Exploiting User Behaviors">
+<meta property="og:url" content="http://smilexnan.github.io/2018/11/25/2018-11-25-DBL/index.html">
+<meta property="og:site_name" content="SmileCode">
+<meta property="og:description" content="有判别的利用用户行为进行下一item的推荐">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fxicpnjd1lj30og0a9q59.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fxk4t9d8b7j309g03yt8s.jpg">
+<meta property="og:updated_time" content="2018-11-25T03:42:19.439Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Next-item Recommendation via Discriminatively Exploiting User Behaviors">
+<meta name="twitter:description" content="有判别的利用用户行为进行下一item的推荐">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/006rHuSXgy1fxicpnjd1lj30og0a9q59.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://smilexnan.github.io/2018/11/25/2018-11-25-DBL/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Next-item Recommendation via Discriminatively Exploiting User Behaviors | SmileCode</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SmileCode</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">采菊东篱下 悠然见南山</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://smilexnan.github.io/2018/11/25/2018-11-25-DBL/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Smilexnan">
+      <meta itemprop="description" content="这个人很懒~什么都没有留下~~">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SmileCode">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Next-item Recommendation via Discriminatively Exploiting User Behaviors
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-25 00:00:00 / 修改时间：11:42:19" itemprop="dateCreated datePublished" datetime="2018-11-25T00:00:00+08:00">2018-11-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">有判别的利用用户行为进行下一item的推荐</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>推荐系统<br>链接：<a href="https://pan.baidu.com/s/1PtLt2ZlKLWisf5fDfKfP2A" target="_blank" rel="noopener">https://pan.baidu.com/s/1PtLt2ZlKLWisf5fDfKfP2A</a> 密码：tba2</p>
+</blockquote>
+<h3 id="Next-item-Recommendation-via-Discriminatively-Exploiting-User-Behaviors"><a href="#Next-item-Recommendation-via-Discriminatively-Exploiting-User-Behaviors" class="headerlink" title="Next-item Recommendation via Discriminatively Exploiting User Behaviors"></a>Next-item Recommendation via Discriminatively Exploiting User Behaviors</h3><h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>推荐系统是电子商务网站的一个基本组成，它试图根据用户的偏好给用户推荐最合适的商品或者服务给用户。随着电子商务机制的发展，大量的用户交互行为（浏览、点击、收藏、购物车、购买）被记录下来了，其中隐含着很多消费模式。这些丰富的信息日志给理解用户历史的稳定的偏好和现在的消费动机提供了机会，可能进一步对更智能的推荐有贡献。</p>
+<p>沿着这个方向，我们对了解客户的交互行为特别感兴趣。现存的工作可以概括为两个模式。</p>
+<ul>
+<li><p>第一个模式是普通的推荐，这类型的推荐主要关注从交互中挖掘$user$和$item$的静态的关联，传统的协同过滤方法就是这类型的代表。然而，很多方法从静态的角度考虑给出的$user-item$的具体的关系，忽视了序列中隐藏的动态的用户偏好。</p>
+</li>
+<li><p>另一个模式是基于序列模式挖掘或者是转换模型来推荐下一个$item$。研究人员最近展示出了很多在电子商务场景中的应用，电子商务场景中用户的配置文件是不可见的，所以推荐系统基于用户在短会话中的交互来开发。这些基于会话的模型，提供了对用户在短期的做决策的理解。</p>
+</li>
+</ul>
+<p>但是动态偏好和如何很好的融合历史稳定的偏好和目前的消费动机仍然没有很多探索。</p>
+<p>事实上，用户的交互行为自然的随时间形成一个行为序列，它可以动态的从长期的角度显示用户的历史偏好和从短期的角度显示当前的消费动机。</p>
+<p>我们得出这样的结论: 一个更出色的推荐系统不仅要考虑用户的历史稳定偏好, 还要考虑到当前的消费动机,有区别地利用不同的$item$或$user$行为类型。</p>
+<h4 id="本文的框架"><a href="#本文的框架" class="headerlink" title="本文的框架"></a>本文的框架</h4><p>本文提出一个新的框架，叫Behavior-Intensive Neural Network (BINN)，用来处理推荐下一个$item$的问题。本文的框架包含两个部分，神经$Item$嵌入和有区别的行为学习。</p>
+<p>特别的，我们提出一个新的$item$嵌入的方法，获得一个统一的特征空间来学习$item$的潜在表达，并且可以捕捉$item$之间的序列相似度。与传统的项目嵌入基于项目图像或文本描述等固有特征方法不同的是, 我们的神经项嵌入方法通过直接利用用户的协同的时序交互来生成$item$的表达。</p>
+<p>我们两种不同的行为，会话行为学习和偏好行为学习，分别表示用户目前的消费动机和通过用户交互行为 得到历史稳定的偏好。特别的，我们分别开发了两个深度神经网络结构，来联合学习会话行为和偏好行为，最后, 通过匹配潜在空间中可能的$item$, BINN 给目标用户生成推荐。</p>
+<h4 id="本文的贡献"><a href="#本文的贡献" class="headerlink" title="本文的贡献"></a>本文的贡献</h4><p>我们建议通过整合用户的历史偏好和当前的动机来提出$item$推荐, 这些都是从用户的交互行为中学到的。<br>我们提出了一种新的神经网络 (BINN), 它包括通过用户的交互分别使用两种适用的神经网络架构。</p>
+<h4 id="模型介绍"><a href="#模型介绍" class="headerlink" title="模型介绍"></a>模型介绍</h4><h5 id="问题定义"><a href="#问题定义" class="headerlink" title="问题定义"></a>问题定义</h5><p>下一项推荐是根据历史预测交互预测用户下一步要访问的内容。</p>
+<ul>
+<li>随着用户交互自然地随时间形成序列，信息系统的日志历史$H$是一组顺序交互$H=${$S_1,S_2,…,S_n$},其中$｜H｜= n$ ，$n$表示用户个数。每个$user$ $u$ 具有相应的交互序列$S_u \in H$，其可以表示为 $S_u=${$(x_1,b_1),(x_2,b_2),…,(x_T,B_T)$}，其中$x_j$表示用户$u$ 第$j$项操作。$b_j$表示行为类型（浏览、点击、收藏、购物车、购买）。</li>
+</ul>
+<p>给定目标用户$u$的项目$S_u=${$(x_1,b_1),(x_2,b_2),…,(x_T,B_T)$}以及所有用户的顺序交互行为$H$，个性化的下一个$item$推荐任务是预测目标用户$u$在下次访问中最有可能访问的项目$x_{T +1}$。</p>
+<h5 id="模型图"><a href="#模型图" class="headerlink" title="模型图"></a>模型图</h5><p><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fxicpnjd1lj30og0a9q59.jpg" alt=""></p>
+<h5 id="Neural-Item-Embedding"><a href="#Neural-Item-Embedding" class="headerlink" title="Neural Item Embedding"></a>Neural Item Embedding</h5><p>在BINN的第一阶段，Neural Item Embedding目的是通过从$item$上的大量顺序行为中学习$item$之间的相似性来为每个$item$生成统一的表示。</p>
+<h6 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h6><p>顺序推荐器的先前工作总是使用1-of-N编码或在深度学习架构中添加额外的嵌入层来表示$item$。然而，对于大型电子商务平台中的一系列物品，一方面，1-of-N编码网络可能花费过长的时间，并且由于高稀疏性所以总是无法很好地优化。另一方面，添加额外的嵌入层可能会使网络在某种程度上失去性能。而且，这两种方法都无法揭示用户交互中隐含的$item$的顺序相似性。</p>
+<h5 id="Discriminative-Behaviors-Learning"><a href="#Discriminative-Behaviors-Learning" class="headerlink" title="Discriminative Behaviors Learning"></a>Discriminative Behaviors Learning</h5><p>在获得$item$嵌入后，Discriminative Behaviors Learning（DBL）可以探索顺序行为作为先验知识，以推荐目标用户在下次访问中最有可能访问的$item$。</p>
+<p>用户的决策过程主要受两个因素的影响：她目前的动机和历史偏好。更具体地说，用户目前的消费动机在短期内是动态的，最近的波动对于反映短期特征也很重要。考虑到所有最近的行为（例如，点击，收藏，购物车，购买）可能意味着用户在短期内的消费动机，我们使用所有类型的短期行为来表示当前的消费动机。另一方面，至于利用用户的历史偏好，并非所有类型的行为都能描绘出用户的偏好。例如，我们可以假设，如果用户只是点击它而不是最后购买，则不喜欢该$item$。因此，为了对用户的历史偏好进行建模，我们仅保留能够从交互历史（即购买行为）清楚地描绘用户的潜在偏好的行为。</p>
+<p>实际上，用户的交互过程是一系列伴随时间的隐式反馈。因此，与传统的推荐系统不同，我们以静态方式探索$user-item$交互，我们通过顺序建模来处理下一项推荐。具体而言，我们设计了两种判别行为学习方法：会话行为学习（SBL）和偏好行为学习（PBL），以分别学习用户的当前消费动机和历史稳定偏好。此外，在此基础上，我们开发了两个基于LSTM的独立深度神经架构，共同学习这两种行为学习的动机和偏好。</p>
+<h6 id="Session-Behaviors-Learning"><a href="#Session-Behaviors-Learning" class="headerlink" title="Session Behaviors Learning"></a>Session Behaviors Learning</h6><p>通过判别式$D_{SBL}(x_I,x_j)= \Phi ((t-i) \leq ts)$ 来确定某个$item$ $x_i$是否是会话行为元素。其中$\Phi (a)$ 是判别函数，$a$ 为真则等于1，否则等于0。$ts$ 是人工指定的，在本文中$ts$被设置为10作为默认值。</p>
+<p>本文开发了一个Contextual LSTM(CLSTM)来学习用户当前的消费动机。在初始化之后，在第$j$ 个交互步骤，每个交互的隐藏状态$h_j$由先前的隐藏状态$h_{j-1}$，当前$item$嵌入$v_j$ 和当前行为向量$b_j$更新（$b_j$是行为的one-hot 表示）</p>
+<p><img src="http://ww1.sinaimg.cn/large/006rHuSXgy1fxk4t9d8b7j309g03yt8s.jpg" alt=""></p>
+<p>其中$i_j， f_j， o_j$ 分别是第$j$步的输入门，忘记门，输出门。$v_j$是$item$嵌入向量，$b_j$是行为向量，$c_j$是单元存储器 ，$h_j$是第$j$步的输出。</p>
+<p>我们使用最终输出状态$h_{t -1}$ 表示用户$u$的当前消费动机，即$\Psi_{SBL}= h_{t -1}$。利用上述网络结构，SBL可以自然地对用户会话行为的波动进行建模，以获得当前消费动机的表示。</p>
+<h6 id="Preference-Behaviors-Learning"><a href="#Preference-Behaviors-Learning" class="headerlink" title="Preference Behaviors Learning"></a>Preference Behaviors Learning</h6><p>如上所述，更智能的推荐系统不仅应考虑用户当前的消费动机，还应考虑历史稳定的偏好。因此，除了在短期内利用SBL的消费动机之外，PBL用于从长期的偏好行为中学习用户稳定的历史偏好。实际上，只有部分行为意味着用户的偏好。通过判别式$D_{PBL}(v_i,b_i)=\Phi (b_i \in P)$ 确定某种相互作用$(v_i，b_i) \in S_u$是否是偏好行为的元素。</p>
+<p>其中$P$是偏好行为集合。其中包含的偏好行为有收藏，购物车，购买。</p>
+<p>与SBL不同，PBL是历史偏好的全部表示，具有较少的波动。这使SBL的体系结构无法很好地获得用户的历史偏好。所以，我们将CLSTM调整为Bi-CLSTM的双向架构。以充分利用向前和向后的上下文信息进行偏好的长期表示。</p>
+<p>我们可以通过平均合并层为用户u生成偏好行为$\Psi _{PBL}$的统一表示：$ \Psi _{PBL} = average(h_1^P,h_2^P,…,h_m^P)$</p>
+<p>特别地，将嵌入偏好交互作为上述网络的输入，PBL能够学习和描述每个用户的个性化偏好。 这可以帮助BINN更好地理解用户的历史稳定偏好。</p>
+<p>到目前为止，从判别行为学习（DBL），我们已经建模了两个行为学习模式：会话行为学习$\Psi _{SBL}$和偏好行为学习$\Psi _{PBL}$。 然后，在完全连接的层之后，我们可以生成下一个项目的$d$维表示$v_t$</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/algorithm/" rel="tag"># algorithm</a>
+          
+            <a href="/tags/Recommended-system/" rel="tag"># Recommended system</a>
+          
+            <a href="/tags/Sequential-Recommender/" rel="tag"># Sequential Recommender</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/18/2018-11-18-RCF/" rel="next" title="Recurrent Collaborative Filtering for Unifying General and Sequential Recommender">
+                <i class="fa fa-chevron-left"></i> Recurrent Collaborative Filtering for Unifying General and Sequential Recommender
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Smilexnan</p>
+              <p class="site-description motion-element" itemprop="description">这个人很懒~什么都没有留下~~</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blueschang.github.io/" title="https://blueschang.github.io/" rel="noopener" target="_blank">BlueCode</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://toaco.github.io/" title="https://toaco.github.io/" rel="noopener" target="_blank">Jeffrey‘s Blog</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coder-wen.github.io/" title="https://coder-wen.github.io/" rel="noopener" target="_blank">coderwen的踩坑日记</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Next-item-Recommendation-via-Discriminatively-Exploiting-User-Behaviors"><span class="nav-number">1.</span> <span class="nav-text">Next-item Recommendation via Discriminatively Exploiting User Behaviors</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#介绍"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本文的框架"><span class="nav-number">1.2.</span> <span class="nav-text">本文的框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本文的贡献"><span class="nav-number">1.3.</span> <span class="nav-text">本文的贡献</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型介绍"><span class="nav-number">1.4.</span> <span class="nav-text">模型介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#问题定义"><span class="nav-number">1.4.1.</span> <span class="nav-text">问题定义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#模型图"><span class="nav-number">1.4.2.</span> <span class="nav-text">模型图</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Neural-Item-Embedding"><span class="nav-number">1.4.3.</span> <span class="nav-text">Neural Item Embedding</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#原因"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">原因</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Discriminative-Behaviors-Learning"><span class="nav-number">1.4.4.</span> <span class="nav-text">Discriminative Behaviors Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Session-Behaviors-Learning"><span class="nav-number">1.4.4.1.</span> <span class="nav-text">Session Behaviors Learning</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Preference-Behaviors-Learning"><span class="nav-number">1.4.4.2.</span> <span class="nav-text">Preference Behaviors Learning</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Smilexnan</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
